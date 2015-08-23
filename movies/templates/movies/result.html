@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>SF Movies Results</title>
+		<style type="text/css">
+			html, body { height: 100%; margin: 0; padding: 0; }
+			#map { height: 100%; }
+		</style>
+	</head>
+	
+	<body>
+	<div style="float:left; width:40%; overflow: auto;">
+	<form action="{% url 'movies:index' %}" method="get">
+	<ul>
+	<script type="text/javascript">
+	var label = [];
+	var temp = [];
+	</script>
+	{% csrf_token %}
+	{% for film in film_list %}
+		<li> Title: {{ film.title }} </li>
+		<li> Release Year: {{ film.release_year }}</li>
+		{% if  film.locations %}
+			<li> Location: {{ film.locations }} </li><br />
+				<script type="text/javascript">
+				temp = []
+				temp.push('{{ film.title }}');
+				temp.push('{{ film.release_year }}');
+				temp.push('{{ film.locations }}');
+				temp.push({{ film.latitude }});
+				temp.push({{ film.longitude }});
+				label.push(temp);
+				</script>
+		{% else %}
+			<li> No locations found. </li><br />
+		{% endif %}
+	{% endfor %}
+	</ul>
+	<input type="submit" value="Try again" />
+	</form>
+	</div>
+
+	<div id="map" style="float:left; width: 60%; height: 100%"></div>
+	<script type="text/javascript">
+
+		var map;
+		function initMap() {
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: 37.7521662, lng: -122.4474315},
+				zoom: 11
+			});
+			
+			var myLatLng;
+			for (i = 0; i < label.length; ++i)
+			{
+				myLatLng = {lat: label[i][3], lng: label[i][4]};
+				var contentString = '<h1 id="firstHeading" class="firstHeading">label[i][0]</h1>';
+				var marker = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+					title: label[i][0] + ' (' + label[i][1] + ') @ ' + label[i][2]
+				});
+			}
+
+		}
+
+	</script>
+	<script async defer
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCj1SDXgNgYPk11mBJEAMeX3tJpSOKJn_M&callback=initMap">
+	</script>
+	</body>
+</html>
