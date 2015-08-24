@@ -1,7 +1,7 @@
 # OTP
 Code Challenge
 
-**Note 1: The contents of this file and repository will change rapidly till Monday, 24th August, 10 pm IST. Watch out. :blush:**
+**Note 1: The contents of this file and repository may change in next few days. Watch out. :blush:**
 
 **Note 2: This project (the quality of code and result) is in no way the reflection of the kind of software engineer I am or aspire to be. Instead, it reflects my inexperience with Python, Django, HTML, et al.**
 
