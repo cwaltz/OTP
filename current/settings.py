@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=xe__k^d7$swgd=0%o6yi8lrnow6dvssfk9s4jz_7kqedg93lx'
+SECRET_KEY = 'your secret key'	# you get one when you start a new project
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'current.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'current',
-	'USER': 'postgres',
-	'PASSWORD': 'mS_d@7Pf*2u',
-	'HOST': '127.0.0.1',
-	'PORT': '5432',
+        'NAME': 'your_db_name',
+		'USER': 'your_username',
+		'PASSWORD': 'your_password',
+		'HOST': '127.0.0.1',
+		'PORT': '5432',
     }
 }
 
@@ -111,7 +111,7 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+	os.path.join(BASE_DIR, 'static'),
 )
 
 MEDIA_ROOT = "media/"
