@@ -1,9 +1,9 @@
 # OTP
 Code Challenge
 
-**Note 1: The contents of this file and repository will change rapidly till Monday, 24th August, 10 pm IST. Watch out. :blush:
+**Note 1: The contents of this file and repository will change rapidly till Monday, 24th August, 10 pm IST. Watch out. :blush:**
 
-Note 2: This project (the quality of code and result) is in no way the reflection of the kind of software engineer I am or aspire to be. Instead, it reflects my inexperience with Python, Django, HTML, et al.**
+**Note 2: This project (the quality of code and result) is in no way the reflection of the kind of software engineer I am or aspire to be. Instead, it reflects my inexperience with Python, Django, HTML, et al.**
 
 Meanwhile, visit [SF Movies](https://mysfmovies.herokuapp.com/) to have a look at the app *(beta version)*. Hovering over the marker will display the details in **Movie-Title (Release-Year) @ Location-Name** format. Feel free to suggest improvements or to simply have a chat with me (anighadge@yahoo.com).
 
