@@ -10,7 +10,7 @@ from .models import Films
 # Create your views here.
 
 def index(request):
-	
+
 	all_entries = Films.objects.all()
 	if len(all_entries) == 0:		# database is empty
 		filename = 'sfmovies.csv'
