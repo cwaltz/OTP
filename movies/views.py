@@ -57,7 +57,7 @@ def index(request):
 				for film in film_list:
 					if film.locations:	# if location is available
 						if film.latitude == 0:		# no coordinates in database
-							address = film.locations + ', san francisco, CA'
+							address = film.locations + ', San Francisco, CA'
 							address = address.replace(" ", "+")
 							key = '&key=AIzaSyCj1SDXgNgYPk11mBJEAMeX3tJpSOKJn_M'
 							url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s" % address
@@ -75,7 +75,18 @@ def index(request):
 									film.longitude = lng
 									film.save()
 
-				context = {'film_list': film_list}
+				context = {
+					'film_list' : film_list,
+					'title' : film_list[0].title,
+					'release_year' : film_list[0].release_year,
+					'production_company' : film_list[0].production_company,
+					'distributor' : film_list[0].distributor,
+					'director' : film_list[0].director,
+					'writer' : film_list[0].writer,
+					'actor_1' : film_list[0].actor_1,
+					'actor_2' : film_list[0].actor_2,
+					'actor_3' : film_list[0].actor_3,
+				}
 				return render(request, 'movies/result.html', context)
 
 	# if a GET (or any other method) we'll create a blank form

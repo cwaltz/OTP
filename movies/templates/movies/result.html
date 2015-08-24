@@ -16,25 +16,57 @@
 	var label = [];
 	var temp = [];
 	</script>
-	{% csrf_token %}
-	{% for film in film_list %}
-		<li> Title: {{ film.title }} </li>
-		<li> Release Year: {{ film.release_year }}</li>
-		{% if  film.locations %}
-			<li> Location: {{ film.locations }} </li><br />
-				<script type="text/javascript">
-				temp = []
-				temp.push('{{ film.title }}');
-				temp.push('{{ film.release_year }}');
-				temp.push('{{ film.locations }}');
-				temp.push({{ film.latitude }});
-				temp.push({{ film.longitude }});
-				label.push(temp);
-				</script>
-		{% else %}
-			<li> No locations found. </li><br />
+	{% if title %}
+	<li> Title: {{ title }} </li>
+	{% endif %}
+	{% if release_year %}
+	<li> Release Year: {{ release_year }}</li>
+	{% endif %}
+	{% if production_company %}	
+	<li> Production Company: {{ production_company }} </li>
+	{% endif %}
+	{% if distributor %}
+	<li> Distributor: {{ distributor }} </li>
+	{% endif %}
+	{% if director %}
+	<li> Director: {{ director }} </li>
+	{% endif %}
+	{% if writer %}
+	<li> Writer: {{ writer }} </li>
+	{% endif %}
+	{% if actor_1 %}
+	<li> Actor(s):
+		<ul>
+		{% if actor_1 %}
+		<li> {{ actor_1 }} </li>
 		{% endif %}
-	{% endfor %}
+		{% if actor_2 %}
+		<li> {{ actor_2 }} </li>
+		{% endif %}
+		{% if actor_3 %}
+		<li> {{ actor_3 }} </li>
+		{% endif %}
+		</ul>
+	</li>
+	{% endif %}
+	<li> Location(s):
+		<ul>
+		{% for film in film_list %}
+			{% if film.locations %}
+				<li> {{ film.locations }} </li>
+					<script type="text/javascript">
+					temp = []
+					temp.push('{{ film.title }}');
+					temp.push('{{ film.release_year }}');
+					temp.push('{{ film.locations }}');
+					temp.push({{ film.latitude }});
+					temp.push({{ film.longitude }});
+					label.push(temp);
+					</script>
+			{% endif %}
+		{% endfor %}
+		</ul>
+	</li>
 	</ul>
 	<input type="submit" value="Try again" />
 	</form>
