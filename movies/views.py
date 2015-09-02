@@ -2,7 +2,7 @@ import urllib, urllib.request, json, csv, os
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Q, Count
 
 from .forms import FilmsForm
 from .models import Films
@@ -43,7 +43,7 @@ def index(request):
 			# process the data in form.cleaned_data as required
 			# ...
 			# redirect to a new URL:
-			film_list = Films.objects.filter(title__iexact=request.POST['title'])
+			film_list = Films.objects.filter(title__icontains=request.POST['title'])
 			
 			if len(film_list) == 0:		# no records in database for given query
 				form = FilmsForm()
@@ -54,38 +54,62 @@ def index(request):
 				})
 			
 			else:
-				for film in film_list:
-					if film.locations:	# if location is available
-						if film.latitude == 0:		# no coordinates in database
-							address = film.locations + ', San Francisco, CA'
-							address = address.replace(" ", "+")
-							key = '&key=AIzaSyCj1SDXgNgYPk11mBJEAMeX3tJpSOKJn_M'
-							url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s" % address
-							url += key
-							try:
-								response = urllib.request.urlopen(url).read().decode("utf-8")
-							except:
-								smile = ':)'
-							else:
-								result = json.loads(response)
-								if result['status'] == 'OK':
-									lat = float(str(result['results'][0]['geometry']['location']['lat']))
-									lng = float(str(result['results'][0]['geometry']['location']['lng']))
-									film.latitude = lat
-									film.longitude = lng
-									film.save()
+				title_list = film_list.values('title').annotate(total=Count('title'))
+				title_len = len(title_list)
+				title_string = request.POST['title']
+				context_list = []
+				
+				for a in title_list:
+					temp_list = film_list.filter(title__iexact=a['title'])
+					a_dict = {}
+					a_dict['title'] = temp_list[0].title
+					a_dict['release_year'] = temp_list[0].release_year
+					a_dict['production_company'] = temp_list[0].production_company
+					a_dict['distributor'] = temp_list[0].distributor
+					a_dict['director'] = temp_list[0].director
+					a_dict['writer'] = temp_list[0].writer
+					a_dict['actor_1'] = temp_list[0].actor_1
+					a_dict['actor_2'] = temp_list[0].actor_2
+					a_dict['actor_3'] = temp_list[0].actor_3
+					location_list = []
+				
+					for film in temp_list:
+						if film.locations:	# if location is available
+							if film.latitude == 0:		# no coordinates in database
+								address = film.locations + ', San Francisco, CA'
+								address = address.replace(" ", "+")
+								key = '&key=AIzaSyCj1SDXgNgYPk11mBJEAMeX3tJpSOKJn_M'
+								url = "https://maps.googleapis.com/maps/api/geocode/json?address=%s" % address
+								url += key
+								try:
+									response = urllib.request.urlopen(url).read().decode("utf-8")
+								except:
+									smile = ':)'
+								else:
+									result = json.loads(response)
+									if result['status'] == 'OK':
+										lat = float(str(result['results'][0]['geometry']['location']['lat']))
+										lng = float(str(result['results'][0]['geometry']['location']['lng']))
+										film.latitude = lat
+										film.longitude = lng
+										film.save()
+										
+							# end if
+							loc_dict = {}
+							loc_dict['loc'] = film.locations
+							loc_dict['lat'] = film.latitude
+							loc_dict['lng'] = film.longitude
+							location_list.append(loc_dict)
+							
+					# end for
+					a_dict['locations'] = location_list
+					context_list.append(a_dict)
 
+				# end for
 				context = {
-					'film_list' : film_list,
-					'title' : film_list[0].title,
-					'release_year' : film_list[0].release_year,
-					'production_company' : film_list[0].production_company,
-					'distributor' : film_list[0].distributor,
-					'director' : film_list[0].director,
-					'writer' : film_list[0].writer,
-					'actor_1' : film_list[0].actor_1,
-					'actor_2' : film_list[0].actor_2,
-					'actor_3' : film_list[0].actor_3,
+					'film_list' : context_list,
+					'title_len' : title_len,
+					'title_string' : title_string,
 				}
 				return render(request, 'movies/result.html', context)
 
