@@ -10,7 +10,7 @@ from .models import Films
 # Create your views here.
 
 def index(request):
-
+	
 	all_entries = Films.objects.all()
 	if len(all_entries) == 0:		# database is empty
 		filename = 'sfmovies.csv'
@@ -34,8 +34,19 @@ def index(request):
 				films.longitude = 0
 				films.save()
 
+	if request.is_ajax():
+		q = request.GET.get('term', '')
+		film_list = Films.objects.filter(title__icontains=q)
+		title_list = film_list.values('title').annotate(total=Count('title'))
+		results = []
+		for film in title_list:
+			results.append(film['title'])
+		data = json.dumps(results)
+		mimetype = 'application/json'
+		return HttpResponse(data, mimetype)
+	
 	# if this is a POST request we need to process the form data
-	if request.method == 'POST':
+	elif request.method == 'POST':
 		# create a form instance and populate it with data from the request:
 		form = FilmsForm(request.POST)
 		# check whether it's valid:
