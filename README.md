@@ -9,5 +9,3 @@ Meanwhile, visit [SF Movies](https://mysfmovies.herokuapp.com/) to have a look a
 
 1. This project is developed on windows 7. I am not sure what changes one needs to make to make it work on other platforms. In any case, feel free to approach me.
 2. Make sure that you have installed [PostgreSQL](http://www.postgresql.org/) and [virtualenv](https://virtualenv.pypa.io/en/latest/).
-
-In order to see autocomplete in action, we need to allow browsers to load insecure content. Please use the following links: [Firefox](https://support.mozilla.org/en-US/kb/how-does-content-isnt-secure-affect-my-safety?as=u&utm_source=inproduct) and [Chrome](http://superuser.com/questions/487748/how-to-allow-chrome-browser-to-load-insecure-content).
